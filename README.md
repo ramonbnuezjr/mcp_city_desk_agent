@@ -1,0 +1,137 @@
+# MCP City Desk Agent
+
+AI-powered interface for municipal data workflows using MCP (Model Context Protocol) architecture.
+
+## Quick Start
+
+### Prerequisites
+- Python 3.8+
+- Docker and Docker Compose (optional)
+
+### Local Development Setup
+
+1. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **Run the MCP server:**
+   ```bash
+   python -m uvicorn src.mcp_server.main:app --reload --host 0.0.0.0 --port 8000
+   ```
+
+3. **Test the system:**
+   ```bash
+   python test_mcp_server.py
+   ```
+
+### Docker Setup
+
+1. **Start services:**
+   ```bash
+   docker-compose up -d
+   ```
+
+2. **Check status:**
+   ```bash
+   curl http://localhost:8000/status
+   ```
+
+## API Endpoints
+
+- `GET /` - Health check
+- `GET /status` - Service status and component health
+- `POST /command` - Execute MCP commands
+- `GET /commands/{command_id}` - Get command status and results
+
+### RAG Endpoints
+
+- `POST /rag/ingest` - Ingest PDF documents into the RAG system
+- `POST /rag/query` - Query documents using semantic search
+- `GET /rag/stats` - Get RAG system statistics
+- `POST /rag/reset` - Reset the RAG system (use with caution)
+
+## Example Usage
+
+### Query NYC Open Data
+
+```bash
+curl -X POST "http://localhost:8000/command" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "intent": "data_query",
+    "parameters": {
+      "dataset": "erm2-nwe9",
+      "filters": {"status": "open"},
+      "limit": 100
+    },
+    "user_id": "analyst_001"
+  }'
+```
+
+### Query Documents with RAG
+
+```bash
+curl -X POST "http://localhost:8000/rag/query" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "building permit requirements",
+    "n_results": 5
+  }'
+```
+
+### Ingest PDF Documents
+
+```bash
+curl -X POST "http://localhost:8000/rag/ingest" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "file_path": "/path/to/municipal_code.pdf",
+    "metadata": {"document_type": "municipal_code", "department": "planning"}
+  }'
+```
+
+### Check Command Status
+
+```bash
+curl "http://localhost:8000/commands/{command_id}"
+```
+
+## Architecture
+
+- **MCP Server**: FastAPI-based server handling command routing
+- **Connectors**: API adapters for external data sources (NYC Open Data, ServiceNow)
+- **RAG Layer**: ChromaDB-based document retrieval and semantic search
+- **Command Logger**: SQLite-based audit trail for all operations
+- **Models**: Pydantic models for type safety and validation
+
+## Development
+
+### Project Structure
+```
+src/
+├── mcp_server/
+│   ├── main.py              # FastAPI application
+│   ├── models/              # Data models
+│   ├── connectors/          # External API connectors
+│   └── utils/               # Utilities (logging, etc.)
+├── requirements.txt         # Python dependencies
+└── docker-compose.yml      # Local development setup
+```
+
+### Running Tests
+```bash
+# Test basic MCP server functionality
+python test_mcp_server.py
+
+# Test RAG system specifically
+python test_rag_system.py
+```
+
+## Next Steps
+
+- [x] Implement RAG layer with ChromaDB
+- [ ] Build web dashboard
+- [ ] Add authentication and RBAC
+- [ ] Implement report generation workflows
+- [ ] Add ServiceNow connector (future enhancement)

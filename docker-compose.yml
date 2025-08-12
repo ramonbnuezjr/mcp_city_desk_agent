@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  mcp-city-desk:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    environment:
+      - ENVIRONMENT=development
+      - LOG_LEVEL=INFO
+    command: uvicorn src.mcp_server.main:app --host 0.0.0.0 --port 8000 --reload
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Add ChromaDB for RAG functionality
+  chromadb:
+    image: chromadb/chroma:latest
+    ports:
+      - "8001:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+    environment:
+      - CHROMA_SERVER_HOST=0.0.0.0
+      - CHROMA_SERVER_HTTP_PORT=8000
+      - CHROMA_SERVER_CORS_ALLOW_ORIGINS=["*"]
+
+volumes:
+  chroma_data:
