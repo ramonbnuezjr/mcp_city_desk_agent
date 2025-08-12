@@ -8,6 +8,20 @@ AI-powered interface for municipal data workflows using MCP (Model Context Proto
 - Python 3.8+
 - Docker and Docker Compose (optional)
 
+### Environment Setup
+1. **Copy environment template:**
+   ```bash
+   cp env.example .env
+   ```
+
+2. **Edit .env file with your API keys:**
+   ```bash
+   # NEVER commit .env files to version control!
+   OPENAI_API_KEY=your_actual_openai_key_here
+   WEATHER_API_KEY=your_actual_weather_key_here
+   GOOGLE_GEMINI_API_KEY=your_actual_gemini_key_here
+   ```
+
 ### Local Development Setup
 
 1. **Install dependencies:**

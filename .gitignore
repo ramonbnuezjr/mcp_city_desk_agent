@@ -30,6 +30,13 @@ ENV/
 env.bak/
 venv.bak/
 
+# Environment variables and secrets
+.env
+.env.local
+.env.production
+.env.staging
+*.env
+
 # IDEs
 .vscode/
 .idea/
