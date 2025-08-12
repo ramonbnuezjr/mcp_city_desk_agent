@@ -14,6 +14,7 @@ from .rag.document_processor import DocumentProcessor
 from .rag.query_engine import RAGQueryEngine
 from .llm.llm_client import llm_client
 from .connectors.weather_api import OpenWeatherMapConnector
+from .utils.rate_limiter import rate_limiter
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -62,7 +63,8 @@ async def status():
             "command_logger": command_logger.is_healthy(),
             "rag_engine": rag_engine.is_healthy(),
             "llm_client": len(llm_client.get_available_providers()) > 0,
-            "weather_api": weather_connector.is_healthy()
+            "weather_api": weather_connector.is_healthy(),
+            "rate_limiter": True
         }
     }
 
@@ -247,6 +249,42 @@ async def get_weather_stats():
     """Get weather API cache statistics"""
     try:
         return weather_connector.get_cache_stats()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Rate Limiting endpoints
+@app.get("/rate-limits/stats")
+async def get_rate_limit_stats(endpoint: str = None):
+    """Get rate limiting statistics"""
+    try:
+        return rate_limiter.get_stats(endpoint)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/rate-limits/set-limit")
+async def set_rate_limit(endpoint: str, requests_per_minute: int):
+    """Set custom rate limit for endpoint"""
+    try:
+        rate_limiter.set_custom_limit(endpoint, requests_per_minute)
+        return {"success": True, "endpoint": endpoint, "limit": requests_per_minute}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/rate-limits/reset")
+async def reset_rate_limits(endpoint: str = None):
+    """Reset rate limits for endpoint or all endpoints"""
+    try:
+        rate_limiter.reset_limits(endpoint)
+        return {"success": True, "endpoint": endpoint or "all"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/rate-limits/emergency-override")
+async def emergency_override(endpoint: str, allow: bool = True):
+    """Emergency override for rate limits (use with caution)"""
+    try:
+        rate_limiter.emergency_override(endpoint, allow)
+        return {"success": True, "endpoint": endpoint, "action": "allowed" if allow else "blocked"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

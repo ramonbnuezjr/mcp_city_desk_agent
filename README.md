@@ -81,6 +81,13 @@ AI-powered interface for municipal data workflows using MCP (Model Context Proto
 - `POST /weather/correlate` - Correlate weather data with municipal events
 - `GET /weather/stats` - Get weather API cache statistics
 
+### Rate Limiting Endpoints
+
+- `GET /rate-limits/stats` - Get rate limiting statistics for all endpoints
+- `POST /rate-limits/set-limit` - Set custom rate limit for specific endpoint
+- `POST /rate-limits/reset` - Reset rate limits for endpoint or all endpoints
+- `POST /rate-limits/emergency-override` - Emergency override for rate limits
+
 ## Example Usage
 
 ### Query NYC Open Data
