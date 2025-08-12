@@ -12,6 +12,8 @@ from .utils.logger import CommandLogger
 from .rag.chromadb_manager import ChromaDBManager
 from .rag.document_processor import DocumentProcessor
 from .rag.query_engine import RAGQueryEngine
+from .llm.llm_client import llm_client
+from .connectors.weather_api import OpenWeatherMapConnector
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -41,6 +43,9 @@ chroma_manager = ChromaDBManager()
 document_processor = DocumentProcessor()
 rag_engine = RAGQueryEngine(chroma_manager, document_processor)
 
+# Initialize LLM and Weather components
+weather_connector = OpenWeatherMapConnector()
+
 @app.get("/")
 async def root():
     """Health check endpoint"""
@@ -55,7 +60,9 @@ async def status():
         "components": {
             "nyc_open_data": nyc_connector.is_healthy(),
             "command_logger": command_logger.is_healthy(),
-            "rag_engine": rag_engine.is_healthy()
+            "rag_engine": rag_engine.is_healthy(),
+            "llm_client": len(llm_client.get_available_providers()) > 0,
+            "weather_api": weather_connector.is_healthy()
         }
     }
 
@@ -145,6 +152,101 @@ async def reset_rag_system():
     try:
         result = rag_engine.reset_system()
         return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# LLM endpoints
+@app.post("/llm/invoke")
+async def invoke_llm(provider: str, prompt: str, context: str = None, model_params: dict = None):
+    """Invoke a specific LLM provider"""
+    try:
+        result = await llm_client.invoke(provider, prompt, context, model_params)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/llm/invoke-with-fallback")
+async def invoke_llm_with_fallback(primary_provider: str, prompt: str, context: str = None, model_params: dict = None):
+    """Invoke LLM with automatic fallback"""
+    try:
+        result = await llm_client.invoke_with_fallback(primary_provider, prompt, context, model_params)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/llm/cross-validate")
+async def cross_validate_llm(prompt: str, context: str = None, model_params: dict = None):
+    """Get responses from multiple LLM providers for validation"""
+    try:
+        result = await llm_client.cross_validate(prompt, context, model_params)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/llm/stats")
+async def get_llm_stats():
+    """Get LLM usage statistics and cost tracking"""
+    try:
+        return llm_client.get_usage_stats()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/llm/providers")
+async def get_llm_providers():
+    """Get available LLM providers and their information"""
+    try:
+        providers = {}
+        for provider in llm_client.get_available_providers():
+            providers[provider] = llm_client.get_provider_info(provider)
+        return {"available_providers": providers}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Weather API endpoints
+@app.get("/weather/current")
+async def get_current_weather(city: str = "New York", country_code: str = "US", units: str = "metric"):
+    """Get current weather for a city"""
+    try:
+        result = await weather_connector.get_current_weather(city, country_code, units)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/weather/forecast")
+async def get_weather_forecast(city: str = "New York", country_code: str = "US", days: int = 5, units: str = "metric"):
+    """Get weather forecast for a city"""
+    try:
+        result = await weather_connector.get_weather_forecast(city, country_code, days, units)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/weather/alerts")
+async def get_weather_alerts(city: str = "New York", country_code: str = "US"):
+    """Get weather alerts for a city"""
+    try:
+        result = await weather_connector.get_weather_alerts(city, country_code)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/weather/correlate")
+async def correlate_weather_with_events(city: str = "New York", country_code: str = "US", event_type: str = "service_requests"):
+    """Correlate weather data with municipal events"""
+    try:
+        # Get current weather first
+        weather_data = await weather_connector.get_current_weather(city, country_code)
+        # Then correlate with events
+        result = await weather_connector.correlate_with_events(weather_data, event_type)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/weather/stats")
+async def get_weather_stats():
+    """Get weather API cache statistics"""
+    try:
+        return weather_connector.get_cache_stats()
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

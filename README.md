@@ -65,6 +65,22 @@ AI-powered interface for municipal data workflows using MCP (Model Context Proto
 - `GET /rag/stats` - Get RAG system statistics
 - `POST /rag/reset` - Reset the RAG system (use with caution)
 
+### LLM Endpoints
+
+- `POST /llm/invoke` - Invoke a specific LLM provider (GPT-4o-mini or Gemini 2.5 Pro)
+- `POST /llm/invoke-with-fallback` - Invoke with automatic fallback to other providers
+- `POST /llm/cross-validate` - Get responses from multiple providers for validation
+- `GET /llm/stats` - Get usage statistics and cost tracking
+- `GET /llm/providers` - Get available LLM providers and their information
+
+### Weather API Endpoints
+
+- `GET /weather/current` - Get current weather for a city
+- `GET /weather/forecast` - Get weather forecast for a city
+- `GET /weather/alerts` - Get weather alerts for a city
+- `POST /weather/correlate` - Correlate weather data with municipal events
+- `GET /weather/stats` - Get weather API cache statistics
+
 ## Example Usage
 
 ### Query NYC Open Data
@@ -102,6 +118,36 @@ curl -X POST "http://localhost:8000/rag/ingest" \
   -d '{
     "file_path": "/path/to/municipal_code.pdf",
     "metadata": {"document_type": "municipal_code", "department": "planning"}
+  }'
+```
+
+### Invoke LLM with Context
+
+```bash
+curl -X POST "http://localhost:8000/llm/invoke" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "provider": "openai",
+    "prompt": "Summarize the building permit requirements",
+    "context": "Building permits are required for all construction projects..."
+  }'
+```
+
+### Get Weather Data
+
+```bash
+curl "http://localhost:8000/weather/current?city=New%20York&country_code=US&units=metric"
+```
+
+### Correlate Weather with Events
+
+```bash
+curl -X POST "http://localhost:8000/weather/correlate" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "city": "New York",
+    "country_code": "US",
+    "event_type": "service_requests"
   }'
 ```
 
