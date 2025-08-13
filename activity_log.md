@@ -47,3 +47,12 @@
 - Created rate limiting endpoints for monitoring, control, and emergency overrides
 - Integrated with main server status endpoint for system health monitoring
 - Established production-ready infrastructure for municipal deployment requirements
+
+## 2025-08-12 20:45 UTC – NYC Agency PDF Ingestion & RAG System Validation
+
+- Successfully ingested 8 real NYC agency PDFs into RAG system (100% success rate)
+- Fixed ChromaDB metadata type issues (Path objects → strings) and AES PDF decryption
+- Upgraded pypdf to 6.0.0 with cryptography backend for encrypted document support
+- Created 1,073 document chunks from municipal documents covering housing, health, transportation, and AI governance
+- Validated full RAG pipeline with authentic NYC agency data for realistic testing and validation
+- Established authentic baseline for 95% API query accuracy KPI validation with real municipal content
