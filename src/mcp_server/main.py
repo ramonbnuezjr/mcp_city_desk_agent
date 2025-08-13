@@ -252,6 +252,11 @@ async def get_weather_stats():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/test")
+async def test_endpoint():
+    """Simple test endpoint for connectivity testing"""
+    return {"message": "MCP server is accessible", "timestamp": datetime.utcnow().isoformat()}
+
 # Rate Limiting endpoints
 @app.get("/rate-limits/stats")
 async def get_rate_limit_stats(endpoint: str = None):

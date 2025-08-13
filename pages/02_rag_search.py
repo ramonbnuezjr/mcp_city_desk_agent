@@ -9,6 +9,8 @@ import time
 from datetime import datetime
 import json
 from pathlib import Path
+import requests
+from requests.exceptions import ConnectionError, Timeout
 
 from lib.clients import (
     execute_rag_query,
@@ -361,6 +363,79 @@ else:
                         st.info("No recent searches found")
     except:
         pass
+
+# Weather Context for Municipal Queries
+st.subheader("🌤️ Current Weather Context")
+st.markdown("**Weather conditions that may affect municipal services and responses**")
+
+try:
+    import requests
+    
+    # Get current weather for context
+    st.caption("Fetching weather context...")
+    weather_response = requests.get("http://localhost:8000/weather/current", timeout=10)
+    if weather_response.status_code == 200:
+        weather_data = weather_response.json()
+        
+        if weather_data.get("success"):
+            weather = weather_data.get("weather", {})
+            temp = weather.get("temperature", {})
+            
+            weather_col1, weather_col2, weather_col3 = st.columns(3)
+            
+            with weather_col1:
+                st.metric(
+                    "🌡️ Temperature",
+                    f"{temp.get('current', 'N/A')}°C",
+                    delta=f"{temp.get('feels_like', 'N/A')}°C (feels like)"
+                )
+            
+            with weather_col2:
+                st.metric(
+                    "💨 Wind",
+                    f"{weather.get('wind', {}).get('speed', 'N/A')} m/s",
+                    help="Wind speed in meters per second"
+                )
+            
+            with weather_col3:
+                st.metric(
+                    "💧 Humidity",
+                    f"{weather.get('humidity', 'N/A')}%",
+                    help="Relative humidity"
+                )
+            
+            # Weather alerts and municipal impact
+            current_temp = temp.get('current')
+            if current_temp is not None:
+                if current_temp < 0:
+                    st.warning("❄️ **Cold Weather Conditions** - May affect outdoor services, construction, and emergency response times")
+                elif current_temp > 30:
+                    st.warning("🔥 **Hot Weather Conditions** - May impact public health services, cooling centers, and energy demands")
+                else:
+                    st.success("✅ **Normal Weather Conditions** - Standard municipal service operations")
+            
+            # Weather description
+            st.info(f"**Current Conditions:** {weather.get('main', 'Unknown')} - {weather.get('description', 'No description')}")
+            
+        else:
+            st.error(f"🌤️ Weather API error: {weather_data.get('error', 'Unknown error')}")
+            st.caption(f"Response: {weather_data}")
+            
+    else:
+        st.error(f"🌤️ Weather service error: {weather_response.status_code}")
+        st.caption(f"Response: {weather_response.text[:200]}")
+        
+except requests.exceptions.ConnectionError:
+    st.error("🔌 **Connection Error**")
+    st.caption("Cannot connect to MCP server. Make sure it's running on port 8000.")
+    
+except requests.exceptions.Timeout:
+    st.error("⏰ **Timeout Error**")
+    st.caption("MCP server is taking too long to respond.")
+    
+except Exception as e:
+    st.error(f"❌ **Error**: {str(e)}")
+    st.caption("Unexpected error occurred while fetching weather data")
 
 # Footer
 st.markdown("---")
