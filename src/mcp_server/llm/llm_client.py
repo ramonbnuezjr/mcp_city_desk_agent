@@ -40,7 +40,10 @@ class OpenAIProvider(LLMProvider):
         start_time = time.time()
         
         try:
-            import openai
+            from openai import AsyncOpenAI
+            
+            # Initialize OpenAI client
+            client = AsyncOpenAI(api_key=self.api_key)
             
             # Build the full prompt with context
             full_prompt = prompt
@@ -60,7 +63,7 @@ class OpenAIProvider(LLMProvider):
                 default_params.update(model_params)
             
             # Make API call
-            response = await openai.ChatCompletion.acreate(**default_params)
+            response = await client.chat.completions.create(**default_params)
             
             execution_time = int((time.time() - start_time) * 1000)
             
@@ -123,18 +126,18 @@ class GoogleGeminiProvider(LLMProvider):
             if context:
                 full_prompt = f"Context: {context}\n\nQuery: {prompt}"
             
-            # Default parameters
-            default_params = {
+            # Default parameters (Gemini-specific)
+            generation_config = {
                 "temperature": 0.1,
                 "max_output_tokens": 1000
             }
             
             # Override with custom parameters
             if model_params:
-                default_params.update(model_params)
+                generation_config.update(model_params)
             
-            # Make API call
-            response = await model.generate_content_async(full_prompt, **default_params)
+            # Make API call with generation config
+            response = await model.generate_content_async(full_prompt, generation_config=generation_config)
             
             execution_time = int((time.time() - start_time) * 1000)
             

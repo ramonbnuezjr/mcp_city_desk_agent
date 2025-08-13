@@ -1,0 +1,32 @@
+[
+  {
+    "id": "SW001",
+    "category": "service_workflow",
+    "complexity": "simple",
+    "description": "Service request status check",
+    "prompt": "What is the current status of incident report INC-2025-1234?",
+    "expected_response_type": "status_update",
+    "context_required": "incident_reports",
+    "difficulty": 1
+  },
+  {
+    "id": "SW002",
+    "category": "service_workflow",
+    "complexity": "medium",
+    "description": "Workflow optimization suggestion",
+    "prompt": "Analyze the current service request workflow and suggest improvements to reduce processing time",
+    "expected_response_type": "workflow_analysis",
+    "context_required": "service_procedures,incident_reports",
+    "difficulty": 3
+  },
+  {
+    "id": "SW003",
+    "category": "service_workflow",
+    "complexity": "complex",
+    "description": "End-to-end process mapping",
+    "prompt": "Map the complete process from initial service request to final resolution, identifying bottlenecks and optimization opportunities",
+    "expected_response_type": "process_mapping",
+    "context_required": "all",
+    "difficulty": 4
+  }
+]

@@ -64,6 +64,10 @@ data/
 logs/
 *.log
 
+# Streamlit
+.streamlit/
+.streamlit/secrets.toml
+
 # Test coverage
 htmlcov/
 .tox/

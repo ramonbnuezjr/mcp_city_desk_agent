@@ -1,0 +1,32 @@
+[
+  {
+    "id": "RG001",
+    "category": "report_generation",
+    "complexity": "simple",
+    "description": "Weekly service request summary",
+    "prompt": "Generate a weekly summary of all service requests by type and priority",
+    "expected_response_type": "structured_report",
+    "context_required": "incident_reports",
+    "difficulty": 2
+  },
+  {
+    "id": "RG002",
+    "category": "report_generation",
+    "complexity": "medium",
+    "description": "Compliance status report",
+    "prompt": "Create a compliance status report for all active building permits, highlighting any violations or pending actions",
+    "expected_response_type": "status_report",
+    "context_required": "building_codes,incident_reports",
+    "difficulty": 3
+  },
+  {
+    "id": "RG003",
+    "category": "report_generation",
+    "complexity": "complex",
+    "description": "Executive summary with recommendations",
+    "prompt": "Prepare an executive summary of municipal operations for the past month, including key metrics, trends, and recommendations for improvement",
+    "expected_response_type": "executive_summary",
+    "context_required": "all",
+    "difficulty": 4
+  }
+]

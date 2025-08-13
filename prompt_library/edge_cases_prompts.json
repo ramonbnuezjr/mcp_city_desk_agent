@@ -1,0 +1,32 @@
+[
+  {
+    "id": "EC001",
+    "category": "edge_cases",
+    "complexity": "medium",
+    "description": "Ambiguous regulation interpretation",
+    "prompt": "A property owner wants to convert a residential garage to a home office. Does this require a permit?",
+    "expected_response_type": "interpretation_with_reasoning",
+    "context_required": "building_codes,zoning_regulations",
+    "difficulty": 3
+  },
+  {
+    "id": "EC002",
+    "category": "edge_cases",
+    "complexity": "medium",
+    "description": "Conflicting requirements",
+    "prompt": "What happens when building code requirements conflict with zoning regulations?",
+    "expected_response_type": "conflict_resolution",
+    "context_required": "building_codes,zoning_regulations",
+    "difficulty": 3
+  },
+  {
+    "id": "EC003",
+    "category": "edge_cases",
+    "complexity": "high",
+    "description": "Emergency situation handling",
+    "prompt": "How should code enforcement handle an emergency situation where immediate action is required but proper procedures cannot be followed?",
+    "expected_response_type": "emergency_protocol",
+    "context_required": "all",
+    "difficulty": 4
+  }
+]

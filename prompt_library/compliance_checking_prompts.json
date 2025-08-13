@@ -1,0 +1,32 @@
+[
+  {
+    "id": "CC001",
+    "category": "compliance_checking",
+    "complexity": "simple",
+    "description": "Basic permit compliance check",
+    "prompt": "Is a building permit required for a 200 sq ft garden shed?",
+    "expected_response_type": "yes_no_with_explanation",
+    "context_required": "building_codes",
+    "difficulty": 1
+  },
+  {
+    "id": "CC002",
+    "category": "compliance_checking",
+    "complexity": "medium",
+    "description": "Multi-regulation compliance assessment",
+    "prompt": "Check if a proposed commercial development complies with all zoning, building, and environmental regulations",
+    "expected_response_type": "compliance_assessment",
+    "context_required": "building_codes,zoning_regulations",
+    "difficulty": 3
+  },
+  {
+    "id": "CC003",
+    "category": "compliance_checking",
+    "complexity": "complex",
+    "description": "Compliance audit with recommendations",
+    "prompt": "Conduct a comprehensive compliance audit of all active projects and provide recommendations for addressing any violations",
+    "expected_response_type": "audit_report",
+    "context_required": "all",
+    "difficulty": 4
+  }
+]

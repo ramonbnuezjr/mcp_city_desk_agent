@@ -1,0 +1,32 @@
+[
+  {
+    "id": "CA001",
+    "category": "correlation_analysis",
+    "complexity": "simple",
+    "description": "Weather impact on service demand",
+    "prompt": "How does weather affect the volume of service requests?",
+    "expected_response_type": "correlation_analysis",
+    "context_required": "weather_correlation",
+    "difficulty": 2
+  },
+  {
+    "id": "CA002",
+    "category": "correlation_analysis",
+    "complexity": "medium",
+    "description": "Seasonal patterns in municipal operations",
+    "prompt": "Analyze seasonal patterns in building permit applications and identify peak periods",
+    "expected_response_type": "trend_analysis",
+    "context_required": "building_codes,weather_correlation",
+    "difficulty": 3
+  },
+  {
+    "id": "CA003",
+    "category": "correlation_analysis",
+    "complexity": "complex",
+    "description": "Multi-factor impact analysis",
+    "prompt": "What factors contribute to delays in service request resolution, and how do they interact with weather conditions?",
+    "expected_response_type": "multivariate_analysis",
+    "context_required": "incident_reports,weather_correlation,service_procedures",
+    "difficulty": 4
+  }
+]

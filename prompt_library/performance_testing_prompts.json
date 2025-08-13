@@ -1,0 +1,32 @@
+[
+  {
+    "id": "PT001",
+    "category": "performance_testing",
+    "complexity": "simple",
+    "description": "Large dataset query",
+    "prompt": "Retrieve all incident reports from the past year and categorize them by type and priority",
+    "expected_response_type": "categorized_data",
+    "context_required": "incident_reports",
+    "difficulty": 2
+  },
+  {
+    "id": "PT002",
+    "category": "performance_testing",
+    "complexity": "medium",
+    "description": "Complex multi-source query",
+    "prompt": "Analyze the relationship between weather conditions, service request volume, and resolution times over the past 6 months",
+    "expected_response_type": "comprehensive_analysis",
+    "context_required": "weather_correlation,incident_reports",
+    "difficulty": 3
+  },
+  {
+    "id": "PT003",
+    "category": "performance_testing",
+    "complexity": "high",
+    "description": "Real-time data processing",
+    "prompt": "Monitor incoming service requests in real-time and provide instant analysis and recommendations",
+    "expected_response_type": "real_time_analysis",
+    "context_required": "all",
+    "difficulty": 4
+  }
+]

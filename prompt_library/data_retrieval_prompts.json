@@ -1,0 +1,42 @@
+[
+  {
+    "id": "DR001",
+    "category": "data_retrieval",
+    "complexity": "simple",
+    "description": "Basic building permit information lookup",
+    "prompt": "What are the requirements for obtaining a building permit?",
+    "expected_response_type": "factual_list",
+    "context_required": "building_codes",
+    "difficulty": 1
+  },
+  {
+    "id": "DR002",
+    "category": "data_retrieval",
+    "complexity": "simple",
+    "description": "Zoning regulations for specific property type",
+    "prompt": "What can I build in a residential zone?",
+    "expected_response_type": "factual_list",
+    "context_required": "zoning_regulations",
+    "difficulty": 1
+  },
+  {
+    "id": "DR003",
+    "category": "data_retrieval",
+    "complexity": "medium",
+    "description": "Multi-document information synthesis",
+    "prompt": "Compare the requirements for building permits vs. zoning variances",
+    "expected_response_type": "comparison_table",
+    "context_required": "building_codes,zoning_regulations",
+    "difficulty": 2
+  },
+  {
+    "id": "DR004",
+    "category": "data_retrieval",
+    "complexity": "complex",
+    "description": "Cross-reference multiple data sources",
+    "prompt": "What are the environmental compliance requirements for a commercial building project in a mixed-use zone?",
+    "expected_response_type": "comprehensive_analysis",
+    "context_required": "building_codes,zoning_regulations,service_procedures",
+    "difficulty": 3
+  }
+]
