@@ -36,7 +36,7 @@ def load_improvements():
                 return f.read()
         else:
             return "No improvements file found"
-    except Exception as Path:
+    except Exception as e:
         return f"Error loading improvements: {e}"
 
 # Load logs
