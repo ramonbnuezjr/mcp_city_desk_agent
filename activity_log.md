@@ -72,3 +72,10 @@ Change: Fixed NameError in logs page exception handling where 'Exception as Path
 Assumptions/Risks: Exception handling must use correct variable names for proper error reporting
 Verification: Dashboard now starts successfully on localhost:8501 with all pages functional
 KPI Link: Dashboard stability ensures continuous monitoring of 95% API query accuracy target and system performance metrics
+
+## 2025-01-27 21:30 UTC – Assistant – Task: RAG Search Functionality Fix
+Context: User encountered error "RAG retrieval failed: 'RAGQueryEngine' object has no attribute 'query'" when attempting to search
+Change: Fixed method name mismatch in lib/clients.py where execute_rag_query() was calling rag_engine.query() instead of the correct rag_engine.query_documents(). Updated parameter name from top_k to n_results to match the actual method signature.
+Assumptions/Risks: Method names and parameters must exactly match the RAGQueryEngine class implementation
+Verification: RAG search functionality now works correctly, enabling users to query NYC agency documents
+KPI Link: Functional RAG search is essential for achieving the 95% API query accuracy target
